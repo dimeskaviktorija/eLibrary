@@ -1,0 +1,160 @@
+﻿@model IEnumerable<eLibrary.Models.Book>
+
+@{
+    ViewBag.Title = "Avalivable Books";
+}
+<style>
+    .button-8 {
+        background-color: #c84444;
+        border-radius: 3px;
+        border: 1px solid #7aa7c7;
+        box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+        box-sizing: border-box;
+        color: #ff0000;
+        cursor: pointer;
+        display: inline-block;
+        font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 1.15385;
+        margin: 0;
+        outline: none;
+        padding: 8px .8em;
+        position: relative;
+        text-align: center;
+        text-decoration: none;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        vertical-align: baseline;
+        white-space: nowrap;
+    }
+
+        .button-8:hover,
+        .button-8:focus {
+            background-color: rgb(128, 128, 128);
+            color: #ffffff;
+        }
+
+        .button-8:focus {
+            box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+        }
+
+        .button-8:active {
+            background-color: #a0c7e4;
+            box-shadow: none;
+            color: #ffffff;
+        }
+</style>
+<h2>Avalivable Books</h2>
+<h4>Book prices are for books in our bookshops!</h4>
+@if (User.IsInRole("Admin"))
+{
+    <button class="button-8">
+        @Html.ActionLink("Create New", "Create")
+    </button>
+}
+    <br />
+    <br />
+    <table id="books" class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.BookArtUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                @*
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                *@
+                <th>
+                    @Html.DisplayNameFor(model => model.Author.AuthorName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Genre.GenreName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BookURL)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.BookArtUrl" style=" width:180px; height=160px; ">
+                        @*@Html.DisplayFor(modelItem => item.BookArtUrl)*@
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    @*
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                    *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Author.AuthorName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Genre.GenreName)
+                    </td>
+
+                    <td>
+                        @if (this.User.Identity.IsAuthenticated)
+                        {
+                            <a href="@item.BookURL">
+                                <button class="button-8" style="color:snow;">
+                                    Download
+                                </button>
+                            </a>
+                        }
+                        @if (!this.User.Identity.IsAuthenticated)
+                        {
+                            <a href="@Url.Action("Login", "Account")">
+                                <button class="button-8" style="color:snow;">
+                                    Download
+                                </button>
+                            </a>
+                        }
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        <button class="button-8"> @Html.ActionLink("Read More", "Details", new { id = item.BookID }) </button>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <button class="button-8"> @Html.ActionLink("Edit", "Edit", new { id = item.BookID }) </button>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <button class="button-8"> @Html.ActionLink("Delete", "Delete", new { id = item.BookID }) </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+    @section Scripts{
+        <script>
+            $(document).ready(function () {
+                $("#books").DataTable();
+            });
+
+        </script>
+    }
+

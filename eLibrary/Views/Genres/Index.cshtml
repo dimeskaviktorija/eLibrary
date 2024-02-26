@@ -1,0 +1,98 @@
+﻿@model IEnumerable<eLibrary.Models.Genre>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<style>
+    .button-8 {
+        background-color: #c84444;
+        border-radius: 3px;
+        border: 1px solid #7aa7c7;
+        box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+        box-sizing: border-box;
+        color: #ff0000;
+        cursor: pointer;
+        display: inline-block;
+        font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 1.15385;
+        margin: 0;
+        outline: none;
+        padding: 8px .8em;
+        position: relative;
+        text-align: center;
+        text-decoration: none;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        vertical-align: baseline;
+        white-space: nowrap;
+    }
+
+        .button-8:hover,
+        .button-8:focus {
+            background-color: rgb(128, 128, 128);
+            color: #ffffff;
+        }
+
+        .button-8:focus {
+            box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+        }
+
+        .button-8:active {
+            background-color: #a0c7e4;
+            box-shadow: none;
+            color: #ffffff;
+        }
+</style>
+
+<h2>Genres</h2>
+@if (User.IsInRole("Admin"))
+{
+    <button class="button-8">
+        @Html.ActionLink("Create New", "Create")
+    </button>
+    <br />
+    <br />
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GenreName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GenreDesc)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.GenreName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GenreDesc)
+            </td>
+            <td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <button class="button-8">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.GenreID })
+                    </button>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    <button class="button-8">
+                        @Html.ActionLink("Delete", "Delete", new { id = item.GenreID })
+                    </button>
+                        }
+                </td>
+        </tr>
+    }
+
+</table>
